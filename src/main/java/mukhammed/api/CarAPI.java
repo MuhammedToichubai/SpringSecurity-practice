@@ -48,4 +48,14 @@ public class CarAPI {
     public SimpleResponse deleteById(@PathVariable Long carId) {
         return carService.deleteById(carId);
     }
+
+
+    @GetMapping("/search")
+    public List<ResponseCarsPage> searchByBrandAndModel(
+            @RequestParam (required = false) String brand,
+            @RequestParam (required = false) String model
+    ){
+       return carService.searchByBrandAndModel(brand, model);
+    }
+
 }

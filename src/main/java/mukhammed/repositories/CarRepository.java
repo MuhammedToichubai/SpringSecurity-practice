@@ -33,4 +33,15 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query("select new mukhammed.dto.response.ResponseCarsPage(c.brand, c.model, c.carInfo.yearOfIssue) from Car c where c.owner.id = ?1")
     List<ResponseCarsPage> findCarsForProfile(Long userID);
+
+    @Query("select new mukhammed.dto.response.ResponseCarsPage(c.brand, c.model, c.carInfo.yearOfIssue) from Car c where c.brand ilike %?1%")
+    List<ResponseCarsPage> findCarsByBrand(String brand);
+
+    @Query("select new mukhammed.dto.response.ResponseCarsPage(c.brand, c.model, c.carInfo.yearOfIssue) from Car c where c.model ilike %?1%")
+    List<ResponseCarsPage> findCarsByModel(String model);
+
+    @Query("select new mukhammed.dto.response.ResponseCarsPage(c.brand, c.model, c.carInfo.yearOfIssue) " +
+            "from Car c where c.brand ilike %:brand% " +
+            "and c.model ilike %:model%")
+    List<ResponseCarsPage> findCarsByBrandAndModel(String brand, String model);
 }

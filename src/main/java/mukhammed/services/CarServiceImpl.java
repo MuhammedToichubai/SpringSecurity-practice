@@ -72,4 +72,12 @@ public class CarServiceImpl {
 
         return SimpleResponse.builder().status("DELETE").massage("Successfully deleted car.").build();
     }
+
+    public List<ResponseCarsPage> searchByBrandAndModel(String brand, String model) {
+
+        if (brand == null && model == null) return carRepository.findAllCars();
+        else if(brand != null && model == null) return carRepository.findCarsByBrand(brand);
+        else if (brand == null) return carRepository.findCarsByModel(model);
+        else return carRepository.findCarsByBrandAndModel(brand, model);
+    }
 }
