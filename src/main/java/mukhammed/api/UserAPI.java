@@ -3,6 +3,7 @@ package mukhammed.api;
 import mukhammed.dto.request.UserRequest;
 import mukhammed.dto.response.SimpleResponse;
 import mukhammed.dto.response.ResponseUserInnerPage;
+import mukhammed.dto.response.UserProfile;
 import mukhammed.enums.Role;
 import mukhammed.services.UserServiceImpl;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,5 +37,11 @@ public class UserAPI {
     @DeleteMapping("/{userId}")
     public SimpleResponse deleteById(@PathVariable Long userId) {
         return userService.deleteById(userId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
+    @GetMapping("/profile/{userID}")
+    public UserProfile getProfile(@PathVariable Long userID){
+        return userService.getProfile(userID);
     }
 }

@@ -5,8 +5,10 @@ import jakarta.transaction.Transactional;
 import mukhammed.dto.request.UserRequest;
 import mukhammed.dto.response.ResponseUserInnerPage;
 import mukhammed.dto.response.SimpleResponse;
+import mukhammed.dto.response.UserProfile;
 import mukhammed.enums.Role;
 import mukhammed.models.User;
+import mukhammed.repositories.CarRepository;
 import mukhammed.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,10 +22,12 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CarRepository carRepository;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, CarRepository carRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.carRepository = carRepository;
     }
 
     @PostConstruct
@@ -68,5 +72,13 @@ public class UserServiceImpl {
         user.setRole(role);
 
         return userRepository.findUserByID(userId).orElseThrow();
+    }
+
+    public UserProfile getProfile(Long userID) {
+        UserProfile userProfile = userRepository.getUserByID(userID).orElseThrow(RuntimeException::new);
+        userProfile.setCarsPageList(
+                carRepository.findCarsForProfile(userID)
+        );
+        return userProfile;
     }
 }

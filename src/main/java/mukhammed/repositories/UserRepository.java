@@ -1,6 +1,7 @@
 package mukhammed.repositories;
 
 import mukhammed.dto.response.ResponseUserInnerPage;
+import mukhammed.dto.response.UserProfile;
 import mukhammed.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select case when count(u) > 0 then true else false end from User u where u.role = 0")
     Boolean existByAdmin();
+
+    @Query("select new mukhammed.dto.response.UserProfile(u.email, u.phoneNumber) from User u where u.id = :userID")
+    Optional<UserProfile> getUserByID(Long userID);
 }

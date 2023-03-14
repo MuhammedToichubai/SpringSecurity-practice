@@ -30,4 +30,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Modifying
     @Query(value = "delete from Car c where c.id = :carId")
     void deleteCarById(Long carId);
+
+    @Query("select new mukhammed.dto.response.ResponseCarsPage(c.brand, c.model, c.carInfo.yearOfIssue) from Car c where c.owner.id = ?1")
+    List<ResponseCarsPage> findCarsForProfile(Long userID);
 }
