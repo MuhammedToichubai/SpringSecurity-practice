@@ -18,4 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select new mukhammed.dto.response.ResponseUserInnerPage(u.email, u.phoneNumber, u.role)" +
             "from User u where u.id = ?1")
     Optional<ResponseUserInnerPage> findUserByID(Long userId);
+
+    @Query("select case when count(u) > 0 then true else false end from User u where u.role = 0")
+    Boolean existByAdmin();
 }

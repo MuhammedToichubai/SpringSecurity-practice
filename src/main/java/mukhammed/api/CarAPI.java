@@ -24,9 +24,11 @@ public class CarAPI {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
-    @PostMapping
-    public SimpleResponse save(@RequestBody CarRequest request) {
-        return carService.save(request);
+    @PostMapping("/save/{userID}")
+    public SimpleResponse save(@RequestBody CarRequest request,
+                               @PathVariable Long userID) {
+
+        return carService.save(request, userID);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER', 'VENDOR')")

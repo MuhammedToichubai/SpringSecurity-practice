@@ -28,13 +28,16 @@ public class UserServiceImpl {
 
     @PostConstruct
     public void saveAdmin(){
-        User admin = new User();
-        admin.setEmail("admin@gmail.com");
-        admin.setPhoneNumber("0997997750");
-        admin.setRole(Role.ADMIN);
-        admin.setPassword(passwordEncoder.encode("admin"));
-        userRepository.save(admin);
-        System.out.println("Successfully admin saved");
+        if (!userRepository.existByAdmin()){
+            User admin = new User();
+            admin.setEmail("admin@gmail.com");
+            admin.setPhoneNumber("0997997750");
+            admin.setRole(Role.ADMIN);
+            admin.setPassword(passwordEncoder.encode("admin"));
+            userRepository.save(admin);
+            System.out.println("Successfully admin saved");
+        }
+
     }
 
 

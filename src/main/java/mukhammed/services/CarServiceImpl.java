@@ -7,8 +7,10 @@ import mukhammed.dto.response.ResponseCarsPage;
 import mukhammed.dto.response.SimpleResponse;
 import mukhammed.models.Car;
 import mukhammed.models.CarInfo;
+import mukhammed.models.User;
 import mukhammed.repositories.CarInfoRepository;
 import mukhammed.repositories.CarRepository;
+import mukhammed.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,13 +24,16 @@ import java.util.List;
 public class CarServiceImpl {
     private final CarRepository carRepository;
     private final CarInfoRepository carInfoRepository;
+    private final UserRepository userRepository;
 
-    public CarServiceImpl(CarRepository carRepository, CarInfoRepository carInfoRepository) {
+    public CarServiceImpl(CarRepository carRepository, CarInfoRepository carInfoRepository, UserRepository userRepository) {
         this.carRepository = carRepository;
         this.carInfoRepository = carInfoRepository;
+        this.userRepository = userRepository;
     }
 
-    public SimpleResponse save(CarRequest request) {
+    public SimpleResponse save(CarRequest request, Long userID) {
+        User user = userRepository.findById(userID).orElseThrow();
         Car car = new Car();
         car.setBrand(request.brand());
         car.setModel(request.model());
@@ -43,7 +48,8 @@ public class CarServiceImpl {
         carInfo.setCar(car);
         car.setCreatedAt(LocalDate.now());
         carRepository.save(car);
-        carInfoRepository.save(carInfo);
+        user.addCar(car);
+        car.setOwner(user);
 
         return SimpleResponse.builder().status("SAVE").massage("Successfully saved car.").build();
     }
