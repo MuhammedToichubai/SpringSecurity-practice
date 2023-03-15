@@ -23,11 +23,10 @@ public class CarAPI {
         this.carService = carService;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/save/{userID}")
     public SimpleResponse save(@RequestBody CarRequest request,
                                @PathVariable Long userID) {
-
         return carService.save(request, userID);
     }
 
